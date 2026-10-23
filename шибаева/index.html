@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВикторинУм</title>
+    <!-- Подключаем ваши существующие стили -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* ===== Стили для экрана загрузки ===== */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #9B44CE 0%, #CE44B0 50%, #FF6B9D 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Экран загрузки поверх всего */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            animation: cardFadeIn 0.8s ease-out;
+        }
+
+        @keyframes cardFadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .brain-icon-wrapper {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: brainPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes brainPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .app-title {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .loading-text::after {
+            content: '';
+            animation: dotsAnim 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dotsAnim {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .loading-card { padding: 50px 30px; }
+            .app-title { font-size: 28px; }
+            .brain-icon-wrapper { width: 120px; height: 120px; }
+            .brain-icon-wrapper svg { width: 75px; height: 75px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ЭКРАН ЗАГРУЗКИ (Splash Screen) -->
+    <div id="splash-screen">
+        <div class="loading-card">
+            <div class="brain-icon-wrapper">
+                <!-- SVG Иконка мозга с сердечками -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 15 C30 15 15 30 15 50 C15 70 30 85 50 85 C70 85 85 70 85 50 C85 30 70 15 50 15 Z" fill="#FF6B9D" stroke="#CE44B0" stroke-width="2"/>
+                    <path d="M50 15 C40 15 32 25 32 40 C32 50 38 58 50 60 L50 15 Z" fill="#FF8FB8" opacity="0.6"/>
+                    <path d="M50 15 C60 15 68 25 68 40 C68 50 62 58 50 60 L50 15 Z" fill="#FF8FB8" opacity="0.6"/>
+                    <path d="M35 35 Q40 30 45 35" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <path d="M55 35 Q60 30 65 35" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <path d="M32 50 Q40 45 48 50" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <path d="M52 50 Q60 45 68 50" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <path d="M35 65 Q42 60 50 65" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <path d="M50 65 Q58 60 65 65" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+                    <circle cx="42" cy="48" r="3" fill="#4A4A4A"/>
+                    <circle cx="58" cy="48" r="3" fill="#4A4A4A"/>
+                    <path d="M45 58 Q50 62 55 58" stroke="#4A4A4A" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <path d="M25 40 Q15 30 20 20" stroke="#FF6B9D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M75 40 Q85 30 80 20" stroke="#FF6B9D" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M35 25 Q33 23 35 21 Q37 23 35 25" fill="#9B44CE" opacity="0.7"/>
+                    <path d="M65 22 Q63 20 65 18 Q67 20 65 22" fill="#CE44B0" opacity="0.7"/>
+                    <path d="M50 18 Q48 16 50 14 Q52 16 50 18" fill="#FF6B9D" opacity="0.7"/>
+                </svg>
+            </div>
+            <h1 class="app-title">ВикторинУм</h1>
+            <p class="loading-text">Загрузка</p>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР ПРИЛОЖЕНИЯ -->
+    <div class="app-container">
+        
+        <!-- Главный экран (скрыт по умолчанию, пока идет загрузка) -->
+        <div class="screen active" id="main-screen">
+            <header class="app-header">
+                <h1>🧠 ВикторинУм</h1>
+            </header>
+            
+            <h2 style="text-align:center; margin-bottom:20px;">Выберите тему</h2>
+            <div class="topics-grid">
+                <button class="category-card topic-card" data-category="science">
+                    <span class="topic-icon">🔬</span>
+                    <span class="topic-name">Наука</span>
+                    <span class="topic-progress" id="progress-science">0/10</span>
+                </button>
+                <button class="category-card topic-card" data-category="history">
+                    <span class="topic-icon">📖</span>
+                    <span class="topic-name">История</span>
+                    <span class="topic-progress" id="progress-history">0/10</span>
+                </button>
+                <button class="category-card topic-card" data-category="sport">
+                    <span class="topic-icon">⚽</span>
+                    <span class="topic-name">Спорт</span>
+                    <span class="topic-progress" id="progress-sport">0/10</span>
+                </button>
+                <button class="category-card topic-card" data-category="cinema">
+                    <span class="topic-icon">🎬</span>
+                    <span class="topic-name">Кино</span>
+                    <span class="topic-progress" id="progress-cinema">0/10</span>
+                </button>
+                <button class="topic-card random" id="start-random-btn">
+                    <span class="topic-icon">🎲</span>
+                    <span class="topic-name">Случайная тема</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Экран викторины -->
+        <div class="screen" id="quiz-screen">
+            <div class="question-header">
+                <h2 id="category-title">Тема</h2>
+                <div class="question-counter" id="progress-text">1/10</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <div class="difficulty-indicator" id="difficulty-dots"></div>
+            <div class="question-container">
+                <p class="question-text" id="question-text">Текст вопроса</p>
+                <div class="answers-grid" id="options-container"></div>
+            </div>
+            <button class="btn btn-primary" id="select-button" disabled>Выбрать</button>
+        </div>
+
+        <!-- Экран результатов -->
+        <div class="screen" id="result-screen">
+            <div class="result-card">
+                <div class="result-icon">🏆</div>
+                <h2>Результат</h2>
+                <div class="result-score" id="result-score">0/10</div>
+                <div class="result-message" id="result-message"></div>
+                <div class="result-stats">
+                    <div class="stat">
+                        <div class="stat-label">Время</div>
+                        <div class="stat-value" id="result-time">0:00</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="play-again-button">Играть снова</button>
+            </div>
+        </div>
+
+        <!-- Контейнер для конфетти -->
+        <div id="confetti-container"></div>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Логика скрытия экрана загрузки
+        document.addEventListener('DOMContentLoaded', () => {
+            const splash = document.getElementById('splash-screen');
+            
+            // Ждем 2.5 секунды, затем скрываем сплэш-скрин
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                
+                // После завершения анимации исчезновения удаляем элемент из DOM
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 800); 
+            }, 2500);
+        });
+    </script>
+</body>
+</html>
